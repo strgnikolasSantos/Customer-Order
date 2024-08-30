@@ -1,0 +1,27 @@
+CREATE TABLE cliente(
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    nome TEXT,
+    email TEXT);
+INSERT INTO cliente (nome, email) VALUES ("Doctor Who", "doctorwho@timelords.com");
+INSERT INTO cliente (nome, email) VALUES ("Harry Potter", "harry@potter.com");
+INSERT INTO cliente (nome, email) VALUES ("Captain Awesome", "captain@awesome.com");
+ 
+CREATE TABLE pedido (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    cliente_id INTEGER,
+    item TEXT,
+    preco REAL);
+ 
+INSERT INTO pedido (cliente_id, item, preco)
+    VALUES (1, "Sonic Screwdriver", 1000.00);
+INSERT INTO pedido (cliente_id, item, preco)
+    VALUES (2, "High Quality Broomstick", 40.00);
+INSERT INTO pedido (cliente_id, item, preco)
+    VALUES (1, "TARDIS", 1000000.00);
+
+CREATE TABLE pedidoFinal(
+    idPedido INTEGER PRIMARY KEY AUTO_INCREMENT,
+    cliente_id INTEGER,
+    id INTEGER,
+    quant TEXT);
+    

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/estilo.css">
+    <title>Lista de Pedidos</title>
+</head>
+
+<body class="body">
+    <!--Navbar-->
+    <div id="navbar">
+        <nav class="navbar bg-body-tertiary fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">Controle</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                    aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu:</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="pedido.html">Pedidos</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Dropdown
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="cliente.html">Clientes</a></li>
+                                    <li><a class="dropdown-item" href="pedido.html">Produtos</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="index.html">Home</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <form class="d-flex mt-3" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--Fim navbar-->
+    <br>
+    <br>
+    <h1 class="cabecalho">Lista de Pedidos</h1>
+    <!--Container -->
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-sm-3 p-3">
+               
+            </div>
+            <div class="col-sm-6 p-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nome do Cliente</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaPedidos">
+                        <!-- Os pedidos serão preenchidos dinamicamente -->
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-sm-3 p-3"></div>
+        </div>
+    </div>
+    <!--Fim do container-->
+    <script>
+        window.onload = function () {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText); // Adicione esta linha para verificar a resposta JSON
+                    var pedidos = JSON.parse(this.responseText);
+                    var listaPedidos = document.getElementById("listaPedidos");
+
+                    pedidos.forEach(function (pedido) {
+                        var row = document.createElement("tr");
+
+                        var clienteCell = document.createElement("td");
+                        clienteCell.textContent = pedido.nome_cliente;
+                        row.appendChild(clienteCell);
+
+                        var itemCell = document.createElement("td");
+                        itemCell.textContent = pedido.item;
+                        row.appendChild(itemCell);
+
+                        var quantidadeCell = document.createElement("td");
+                        quantidadeCell.textContent = pedido.quantidade;
+                        row.appendChild(quantidadeCell);
+
+                        listaPedidos.appendChild(row);
+                    });
+                }
+            };
+            xmlhttp.open("GET", "exibirPedidos.php", true);
+            xmlhttp.send();
+        };
+    </script>
+</body>
+
+</html>

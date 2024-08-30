@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/estilo.css">
+    <title>Alteração Pedido</title>
+</head>
+
+<body onload="iniciar()" class="body">
+    <!--Navbar-->
+    <div id="navbar">
+        <nav class="navbar bg-body-tertiary fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">Controle</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                    aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu:</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="pedido.html">Pedidos</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Dropdown
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="cliente.html">clientes</a></li>
+                                    <li><a class="dropdown-item" href="pedido.html">Produtos</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="index.html">Home</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <form class="d-flex mt-3" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--Fim navbar-->
+    <br>
+    <br>
+    <br>
+    <h1 class="cabecalho">Alteração Pedido</h1>
+    <!--Container -->
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-sm-3 p-3"></div>
+            <div class="col-sm-6 p-3">
+                <div class="forms">
+                    <div class="form-control" >
+                        <input class="form-control" type="hidden" id="id" name="">
+                        Pedido<br>
+                        <input class="form-control"  type="text" id="item" name=""><br>
+                        Preço<br>
+                        <input class="form-control"  type="number" id="preco" name=""><br>
+                        <input type="button" class="btn btn-primary" value="Confirmar" onclick="alterar()">
+                        <input type="button" class="btn btn-primary" value="Cancelar" onclick="inicio()">
+                        <a href="pedido.html"><input type="button" class="btn btn-primary" value="inicio"></a>
+                    </div>
+                </div>
+                Mensagem:
+                <div id="resultado"></div>
+
+            </div>
+            <div class="col-sm-3 p-3"></div>
+        </div>
+    </div>
+    <!--Fim do  container-->
+    <script type="text/javascript">
+        function iniciar() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var id = urlParams.get('id');
+
+            if (!id) {
+                document.getElementById('resultado').innerHTML = 'ID não encontrado!';
+                return;
+            }
+
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onload = function () {
+                if (this.status == 200) {
+                    var dados = JSON.parse(this.responseText);
+                    if (dados.length > 0) {
+                        var registro = dados[0];
+                        document.getElementById('id').value = registro.id;
+                        document.getElementById('item').value = registro.item;
+                        document.getElementById('preco').value = registro.preco;
+                    } else {
+                        document.getElementById('resultado').innerHTML = 'Pedido não encontrado!';
+                    }
+                } else {
+                    document.getElementById('resultado').innerHTML = 'Erro ao carregar os dados!';
+                }
+            }
+
+            xmlhttp.open("POST", "dadosPedido.php");
+            xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xmlhttp.send("id=" + id);
+        }
+
+        function inicio() {
+            window.location.href = "pedido.html";
+        }
+
+        function alterar() {
+            var id = document.getElementById('id').value;
+            var nome = document.getElementById('item').value;
+            var email = document.getElementById('preco').value;
+
+            var dados = JSON.stringify({ id: id, nome: nome, email: email });
+
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onload = function () {
+                document.getElementById('item').value = "";
+                document.getElementById('preco').value = "";
+                console.log(this.responseText);
+                document.getElementById('resultado').innerHTML = this.responseText;
+            }
+            xmlhttp.open("POST", "altPedido.php");
+            xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xmlhttp.send("dados=" + dados);
+        }
+    </script>
+</body>
+
+</html>
